@@ -13,6 +13,8 @@ if "user" in st.session_state:
     st.write("Welcome,", st.session_state.user["name"])
     st.write("Email:", st.session_state.user["email"])
 
+st.write("fetquest")
+
 
 st.write("Welcome to FETQuest OneView")
 st.write("App is on construction")
