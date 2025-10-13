@@ -9,9 +9,7 @@ if not st.user.is_logged_in:
 if st.button("Log out"):
     st.logout()
 st.markdown(f"Welcome! {st.user.name}")
-if "user" in st.session_state:
-    st.write("Welcome,", st.session_state.user["name"])
-    st.write("Email:", st.session_state.user["email"])
+st.write(f"Email: {st.user.email}")
 
 st.write("fetquest")
 
