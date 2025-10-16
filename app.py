@@ -75,7 +75,7 @@ if not ret_user.data:
     try:
         supabase.table("fet_portfolio_users").insert({
             "username": guser_name,
-            "password_hash": None,
+            "password_hash": "GOOGLE_SSO",
             "email": guser_email
         }).execute()
         st.info("New Google user added to database.")
