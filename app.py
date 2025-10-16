@@ -44,12 +44,12 @@ st.markdown(f"### Welcome, {st.user.name} 👋")
 st.write(f"Email: {st.user.email}")
 
 # Handle login automatically using built-in Google SSO
-if not st.user.is_logged_in:
-    st.login("google")   # Streamlit handles the button and OAuth flow
-    st.stop()
+# if not st.user.is_logged_in:
+#     st.login("google")   # Streamlit handles the button and OAuth flow
+#     st.stop()
 
-if st.button("Log out"):
-    st.logout()
+# if st.button("Log out"):
+#     st.logout()
 
 # Display user info
 st.markdown(f"### Welcome, {st.user.name} 👋")
