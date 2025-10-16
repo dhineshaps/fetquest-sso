@@ -23,7 +23,7 @@ from supabase import create_client, Client
 from postgrest.exceptions import APIError
 
 # --- Setup Supabase ---
-url = st.secrets.database.db_url
+url = st.secrets["db_url"]
 key = st.secrets.database.db_key
 supabase: Client = create_client(url, key)
 
