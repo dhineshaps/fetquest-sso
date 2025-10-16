@@ -38,14 +38,26 @@ if st.button("Log out"):
 st.markdown(f"### Welcome, {st.user.name} 👋")
 st.write(f"Email: {st.user.email}")
 
+# Handle login automatically using built-in Google SSO
+if not st.user.is_logged_in:
+    st.login("google")   # Streamlit handles the button and OAuth flow
+    st.stop()
+
+if st.button("Log out"):
+    st.logout()
+
+# Display user info
+st.markdown(f"### Welcome, {st.user.name} 👋")
+st.write(f"Email: {st.user.email}")
+
 guser_name = st.user.name
 guser_email = st.user.email
 
-# --- Check if user exists ---
+# Check if user exists in your DB
 try:
     ret_user = (
         supabase.table("fet_portfolio_users")
-        .select("email")
+        .select("user_id", "username")
         .eq("email", guser_email)
         .execute()
     )
@@ -53,44 +65,37 @@ except APIError as e:
     st.error(f"Database error: {e}")
     st.stop()
 
-# --- Insert new user if not exists ---
+# Insert new user if not exists
 if not ret_user.data:
     try:
-        supabase.table("fet_portfolio_users").insert(
-            {
-                "username": guser_name,
-                "password_hash": None,
-                "email": guser_email
-            }
-        ).execute()
+        supabase.table("fet_portfolio_users").insert({
+            "username": guser_name,
+            "password_hash": None,
+            "email": guser_email
+        }).execute()
         st.info("New Google user added to database.")
+        # Fetch new record
+        ret_user = (
+            supabase.table("fet_portfolio_users")
+            .select("user_id", "username")
+            .eq("email", guser_email)
+            .execute()
+        )
     except APIError as e:
-        msg = e.message.split(" ")[-1].split("_")[-2].upper() if "already" in e.message else e.message
-        st.error(f"{msg} already exists, try to login with it.")
+        st.error(f"Error inserting user: {e}")
         st.stop()
 
-# --- Fetch user info ---
-try:
-    user_id = (
-        supabase.table("fet_portfolio_users")
-        .select("user_id", "username")
-        .eq("email", guser_email)
-        .execute()
-    )
-except APIError as e:
-    st.error("Error in fetching user data, please retry later.")
-    st.stop()
-
-if user_id.data:
-    u_id = user_id.data[0]['user_id']
-    u_name = user_id.data[0]['username']
-
+# Store user in session
+if ret_user.data:
+    user_data = ret_user.data[0]
     st.session_state.logged_in = True
-    st.session_state.u_id = u_id
-    st.session_state.u_name = u_name
-    st.session_state.user = {"id": u_id, "name": u_name, "email": guser_email}
+    st.session_state.u_id = user_data["user_id"]
+    st.session_state.u_name = user_data["username"]
+    st.session_state.user = {
+        "id": user_data["user_id"],
+        "name": user_data["username"],
+        "email": guser_email
+    }
 
-    st.write(f"User ID: {u_id}")
-    st.write(f"Username: {u_name}")
-
+    st.success(f"Logged in as {user_data['username']}")
     st.switch_page("pages/portfolio_view.py")
