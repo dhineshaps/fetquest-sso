@@ -9,7 +9,7 @@ supabase: Client = create_client(url, key)
 if st.button("Login with Google", type="primary"):
     res = supabase.auth.sign_in_with_oauth({
             "provider": "google",
-            "options": {"redirect_to": "https://fetquest-validasign.streamlit.app"}
+            "options": {"redirect_to": "https://fetquest-validasign.streamlit.app/oauth2callback"}
         })
 
     auth_url = res.url
