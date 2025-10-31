@@ -3,13 +3,13 @@ from supabase import create_client, Client, AuthApiError
 
 url = st.secrets["db_url"]
 key = st.secrets["db_key"]
-
+REDIRECT_URI = st.secrets["auth"]["redirect_uri"]
 supabase: Client = create_client(url, key)
 
 if st.button("Login with Google", type="primary"):
     res = supabase.auth.sign_in_with_oauth({
             "provider": "google",
-            "options": {"redirect_to": "https://fetquest-validasign.streamlit.app/oauth2callback"}
+            "options": {"redirect_to": REDIRECT_URI}
         })
 
     auth_url = res.url
