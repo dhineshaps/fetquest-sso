@@ -7,6 +7,13 @@ key = st.secrets["db_key"]
 supabase: Client = create_client(url, key)
 # st.write(REDIRECT_URI)
 REDIRECT_URI = "https://fetquest-validasign.streamlit.app/"
+
+
+session = supabase.auth.get_session()
+
+if session and session.user:
+    st.success(f"Welcome {session.user.email}")
+    
 if st.button("Login with Google", type="primary"):
     res = supabase.auth.sign_in_with_oauth({
             "provider": "google",
