@@ -18,6 +18,10 @@ if st.button("Login with Google", type="primary"):
     st.stop()
     
     session = supabase.auth.get_session()
+    if st.query_params.get("code"):
+    session = supabase.auth.get_session()
+    st.session_state.user = session.user
+    st.success(f"Welcome, {st.session_state.user.email}!")
     
     if session and session.user:
         st.session_state.user = session.user
