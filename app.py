@@ -10,7 +10,7 @@ REDIRECT_URI = "https://fetquest-validasign.streamlit.app/oauth2callback"
 if st.button("Login with Google", type="primary"):
     res = supabase.auth.sign_in_with_oauth({
             "provider": "google",
-            "options": {"redirect_to": REDIRECT_URI}
+            #"options": {"redirect_to": REDIRECT_URI}
         })
 
     auth_url = res.url
