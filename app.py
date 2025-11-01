@@ -12,6 +12,8 @@ session = supabase.auth.get_session()
 
 if session and session.user:
     st.success(f"Welcome {session.user.email}")
+
+st.write("here")
     
 if st.button("Login with Google", type="primary"):
     res = supabase.auth.sign_in_with_oauth({
