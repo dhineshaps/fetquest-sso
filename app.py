@@ -8,7 +8,6 @@ supabase: Client = create_client(url, key)
 # st.write(REDIRECT_URI)
 REDIRECT_URI = "https://fetquest-validasign.streamlit.app/"
 
-
 session = supabase.auth.get_session()
 
 if session and session.user:
